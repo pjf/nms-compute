@@ -1,0 +1,6 @@
+[package]
+name = "nms-compute"
+version = "0.1.0"
+authors = ["Paul Fenwick <pjf@perltraining.com.au>"]
+
+[dependencies]
