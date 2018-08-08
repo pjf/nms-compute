@@ -100,7 +100,7 @@ fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
 
         // There can only ever be one output, so we'll drill down to it directly.
         // XXX - OMFG, there's got to be a better way than this, please?
-        let (output, qty) = recipe.get(&Yaml::from_str("output")).iter().last().unwrap().as_hash().unwrap().iter().last().unwrap();
+        let (output, qty) = recipe.get(&Yaml::from_str("output")).unwrap().as_hash().unwrap().iter().last().unwrap();
         let output = resources.get(output.as_str().unwrap()).unwrap();
         let output = Output { resource: &output, qty: qty.as_i64().unwrap() as u32 };
 
