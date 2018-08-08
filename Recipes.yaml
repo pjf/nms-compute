@@ -1,0 +1,50 @@
+Purify Ferrite:
+    inputs:
+        Ferrite Dust: 1
+    output:
+        Pure Ferrite: 1
+
+Condense Carbon:
+    inputs:
+        Carbon: 2
+    output:
+        Condensed Carbon: 1
+
+Rocket Fuel:
+    inputs:
+        Tritium: 50
+        Di-hydrogen: 50
+    output:
+        Frigate Fuel (50t): 1
+
+Frobnicate Copper:
+    inputs:
+        Copper: 2
+    output:
+        Chromatic Metal: 1
+
+Frobnicate Emeril:
+    inputs:
+        Emeril: 2
+    output:
+        Chromatic Metal: 3
+
+Poly Fiber:
+    inputs:
+        Star Bulb: 200
+        Cactus Flesh: 100
+    output:
+        Poly Fiber: 1
+
+Glass:
+    inputs:
+        Frost Crystal: 50
+    output:
+        Glass: 1
+
+Living Glass:
+    inputs:
+        Glass: 5
+        Lubricant: 1
+    output:
+        Living Glass: 1

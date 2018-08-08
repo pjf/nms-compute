@@ -1,5 +1,16 @@
+extern crate yaml_rust;
+
+use std::fs::File;
+use std::io::Read;
+use yaml_rust::{YamlLoader,Yaml};
+use yaml_rust::yaml::Hash;
+use std::collections::HashMap;
+
+const RESOURCES_FILE: &'static str = "Resources.yaml";
+const RECIPES_FILE:   &'static str = "Recipes.yaml";
+
 struct Resource {
-    name: &'static str,
+    name: String,
     value: u32,
 }
 
@@ -9,93 +20,22 @@ struct InputOutput<'a> {
 }
 
 // Inputs and outputs both use the same structure,
-// but typing InputOutput every time is both long and makes
+// but typing InputOutput every time is was once long and made
 // it unclear which it is. So let's do some aliasing.
 
 type Input<'a>  = InputOutput<'a>;
 type Output<'a> = InputOutput<'a>;
 
 struct Recipe<'a> {
-    name: &'static str,
+    name: String,
     inputs: Vec<Input<'a>>,
     output: Output<'a>,
 }
 
 fn main() {
-    let fe               = Resource { name: "Ferrite Dust",       value:     14 };
-    let fep              = Resource { name: "Pure Ferrite",       value:     28 };
-    let fepp             = Resource { name: "Magnetised Ferrite", value:     82 };
-    let carbon           = Resource { name: "Carbon",             value:     12 };
-    let condensed_carbon = Resource { name: "Condensed Carbon",   value:     24 };
-    let tritium          = Resource { name: "Tritium",            value:      6 };
-    let dihydrogen       = Resource { name: "Di-hydrogen",        value:     34 };
-    let frigate_fuel_50  = Resource { name: "Frigate Fuel (50t)", value: 50_000 };
-    let copper           = Resource { name: "Copper",             value:    121 };
-    let emeril           = Resource { name: "Emeril",             value:    348 };
-    let chromatic_metal  = Resource { name: "Chromatic Metal",    value:    245 };
-    let gamma_root       = Resource { name: "Gamma Root",         value:     16 };
-    let coprite          = Resource { name: "Coprite",            value:      0 }; // TODO: Find value
-    let cactus           = Resource { name: "Cactus Flesh",       value:     28 };
-    let star_bulb        = Resource { name: "Star Bulbs",         value:      0 }; // TODO
-    let frost_crystal    = Resource { name: "Frost Crystal",      value:     12 };
-    let glass            = Resource { name: "Glass",              value:  18_000 };
-    let living_glass     = Resource { name: "Living Glass",       value: 696_000 };
-    let poly_fiber       = Resource { name: "Poly Fiber",         value: 200_000 };
-    let lubricant        = Resource { name: "Lubricant",          value: 160_000 };
-    let heat_capacitor   = Resource { name: "Heat Capacitor",     value: 240_000 };
-    let circuit_board    = Resource { name: "Circuit Board",      value: 1_196_250 };
 
-    let recipes = vec![
-        Recipe {
-            name: "Purify Ferrite",
-            inputs: vec![ Input { resource: &fe, qty: 1 } ],
-            output: Output { resource: &fep, qty: 1 }
-        },
-        Recipe {
-            name: "Condense carbon",
-            inputs: vec![ Input { resource: &carbon, qty: 2 } ],
-            output: Output { resource: &condensed_carbon, qty: 1 }
-        },
-        Recipe {
-            name: "Rocket Fuel",
-            inputs: vec![
-                Input { resource: &tritium,    qty: 50 },
-                Input { resource: &dihydrogen, qty: 50 },
-            ],
-            output: Output { resource: &frigate_fuel_50, qty: 1 }
-        },
-        Recipe {
-            name: "Copper -> Chromatic Metal",
-            inputs: vec![ Input { resource: &copper, qty: 2 } ],
-            output: Output { resource: &chromatic_metal, qty: 1 }
-        },
-        Recipe {
-            name: "Emeril -> Chromatic Metal",
-            inputs: vec![ Input { resource: &emeril, qty: 2 } ],
-            output: Output { resource: &chromatic_metal, qty: 3 }
-        },
-        Recipe {
-            name: "Poly Fiber",
-            inputs: vec![
-                Input { resource: &star_bulb, qty: 200 },
-                Input { resource: &cactus, qty: 100 },
-            ],
-            output: Output { resource: &poly_fiber, qty: 1 }
-        },
-        Recipe {
-            name: "Glass",
-            inputs: vec![ Input { resource: &frost_crystal, qty: 50 } ],
-            output: Output { resource: &glass, qty: 1 }
-        },
-        Recipe {
-            name: "Living Glass",
-            inputs: vec![
-                Input { resource: &glass, qty: 5 },
-                Input { resource: &lubricant, qty: 1 },
-            ],
-            output: Output { resource: &living_glass, qty: 1 }
-        },
-    ];
+    let resources = read_resources();
+    let recipes   = read_recipes(&resources);
 
     for recipe in recipes.iter() {
         let mut input_val  = 0;
@@ -118,5 +58,66 @@ fn main() {
         let profit = (output_val as f64 - input_val as f64) / input_qty as f64;
         println!("Profit per input = {}u\n\n", profit);
     }
+}
 
+// Reads our resources from the YAML configuration file.
+fn read_resources() -> HashMap<String, Resource> {
+    let mut map = HashMap::new();
+    let resources = yaml_hash_from_file(RESOURCES_FILE);
+
+    for (name, value) in resources.iter() {
+        let name  = String::from(name.as_str().unwrap());
+        println!("Resource: {}", name);
+        let value = value.as_i64().unwrap() as u32;
+        map.insert(name.clone(), Resource { name: name, value: value });
+    }
+
+    return map;
+}
+
+// Reads recipes from our recipes file and returns a vector of them.
+fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
+    let recipes = yaml_hash_from_file(RECIPES_FILE);
+    let mut result = Vec::new();
+
+    for (name, recipe) in recipes.iter() {
+        let name   = String::from(name.as_str().unwrap());
+        let recipe = recipe.as_hash().unwrap();
+
+        // Build all our inputs
+        let mut inputs = Vec::new();
+        for input in recipe.get(&Yaml::from_str("inputs")).iter() {
+
+            // XXX - This me getting a single key-value pair. Is there a better way?
+            let (input, qty) = input.as_hash().unwrap().iter().last().unwrap();
+
+            // Turn the key from our YAML file into an actual resource struct.
+            let resource = resources.get(input.as_str().unwrap()).unwrap();
+            
+            // Add our input to our vector.
+            inputs.push(Input { resource: resource, qty: qty.as_i64().unwrap() as u32 });
+        }
+
+        // There can only ever be one output, so we'll drill down to it directly.
+        // XXX - OMFG, there's got to be a better way than this, please?
+        let (output, qty) = recipe.get(&Yaml::from_str("output")).iter().last().unwrap().as_hash().unwrap().iter().last().unwrap();
+        let output = resources.get(output.as_str().unwrap()).unwrap();
+        let output = Output { resource: &output, qty: qty.as_i64().unwrap() as u32 };
+
+        result.push(Recipe { name: name, inputs: inputs, output: output });
+    }
+
+    return result;
+}
+
+// Reads the file specified and turns it into a Yaml::Hash
+fn yaml_hash_from_file(filename: &str) -> Hash {
+    let mut fh = File::open(filename).expect(&format!("Could not open {}", filename));
+
+    let mut yaml = String::new();
+    fh.read_to_string(&mut yaml).expect(&format!("Reading {} failed", filename));
+
+    let yaml = YamlLoader::load_from_str(&yaml).unwrap();
+    let result = yaml[0].clone().into_hash().unwrap();
+    return result;
 }
