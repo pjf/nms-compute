@@ -3,7 +3,7 @@ extern crate yaml_rust;
 use std::fs::File;
 use std::io::Read;
 use yaml_rust::{YamlLoader,Yaml};
-use yaml_rust::yaml::Hash;
+use yaml_rust::yaml::{Hash,Array};
 use std::collections::HashMap;
 
 const RESOURCES_FILE: &'static str = "Resources.yaml";
@@ -77,12 +77,12 @@ fn read_resources() -> HashMap<String, Resource> {
 
 // Reads recipes from our recipes file and returns a vector of them.
 fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
-    let recipes = yaml_hash_from_file(RECIPES_FILE);
+    let recipes = yaml_array_from_file(RECIPES_FILE);
     let mut result = Vec::new();
 
-    for (name, recipe) in recipes.iter() {
-        let name   = String::from(name.as_str().unwrap());
+    for recipe in recipes.iter() {
         let recipe = recipe.as_hash().unwrap();
+        let name   = String::from(recipe.get(&Yaml::from_str("name")).unwrap().clone().into_string().unwrap());
 
         // Build all our inputs
         let mut inputs = Vec::new();
@@ -112,12 +112,20 @@ fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
 
 // Reads the file specified and turns it into a Yaml::Hash
 fn yaml_hash_from_file(filename: &str) -> Hash {
+    return yaml_from_file(filename).into_hash().unwrap();
+}
+
+fn yaml_array_from_file(filename: &str) -> Array {
+    return yaml_from_file(filename).into_vec().unwrap();
+}
+
+fn yaml_from_file(filename: &str) -> Yaml {
     let mut fh = File::open(filename).expect(&format!("Could not open {}", filename));
 
     let mut yaml = String::new();
     fh.read_to_string(&mut yaml).expect(&format!("Reading {} failed", filename));
 
-    let yaml = YamlLoader::load_from_str(&yaml).unwrap();
-    let result = yaml[0].clone().into_hash().unwrap();
+    let result = YamlLoader::load_from_str(&yaml).unwrap()[0].clone();
+
     return result;
 }
