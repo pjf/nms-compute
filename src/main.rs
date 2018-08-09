@@ -18,15 +18,6 @@ struct FormattingWidth {
     profit: usize,
 }
 
-const FORMATTING_WIDTH: FormattingWidth = FormattingWidth {
-    name:   20,
-    input:  20,
-    output: 20,
-    qty:     3,
-    value:   7,
-    profit: 10,
-};
-
 struct Resource {
     name: String,
     value: u32,
@@ -55,6 +46,21 @@ fn main() {
     let resources = read_resources();
     let recipes   = read_recipes(&resources);
 
+    let width = FormattingWidth {
+        // Some table elements have fixed widths
+        qty:    3,
+        value:  7,
+        profit: 7,
+        // And some we'll dynamically generate some.
+        // I honestly thought these would be more succinct when I started.
+        name:   max_width(recipes.iter().map(|x| &x.name)),
+        output: max_width(recipes.iter().map(|x| &x.output.resource.name)),
+        input:  max_width(recipes.iter().flat_map(|x| &x.inputs).collect::<Vec<&InputOutput>>().iter().map(|x| &x.resource.name)),
+    };
+
+    print_header(&width);
+
+    // Walk through all our recipes and print them!
     for recipe in recipes.iter() {
 
         // Input_val tracks the cost of the entire recipe
@@ -63,7 +69,7 @@ fn main() {
 
         let mut input_qty  = 0;
 
-        print!("{name:<width$} | ", name=recipe.name, width=FORMATTING_WIDTH.name);
+        print!("{name:<width$} | ", name=recipe.name, width=width.name);
 
         // Print all the inputs. Also sum their values and total amount used.
         for input in recipe.inputs.iter() {
@@ -73,7 +79,7 @@ fn main() {
             print!(
                 "{qty:>qty_width$} × {input:<input_width$} ({value:>value_width$}u)",
                 qty=input.qty, input=input.resource.name, value=line_val,
-                qty_width=FORMATTING_WIDTH.qty, input_width=FORMATTING_WIDTH.input, value_width=FORMATTING_WIDTH.value
+                qty_width=width.qty, input_width=width.input, value_width=width.value
             );
             input_val += line_val;
             input_qty += input.qty;
@@ -81,11 +87,39 @@ fn main() {
 
         let profit = (output_val as f64 - input_val as f64) / input_qty as f64;
         println!(
-            " | {qty:>qty_width$} × {output:<output_width$} ({value:>value_width$}u) | {profit:>profit_width$}u",
+            " |{qty:>qty_width$} × {output:<output_width$} ({value:>value_width$}u) | {profit:>profit_width$}u",
             qty=recipe.output.qty, output=recipe.output.resource.name, value=output_val, profit=profit,
-            qty_width=FORMATTING_WIDTH.qty, output_width=FORMATTING_WIDTH.output, value_width=FORMATTING_WIDTH.value, profit_width=FORMATTING_WIDTH.profit
+            qty_width=width.qty, output_width=width.output, value_width=width.value, profit_width=width.profit
         );
     }
+}
+
+fn print_header(width: &FormattingWidth) {
+
+    let input_width  = width.input  + width.qty + width.value + 7; // Magic 7 is our padding and '×' signs.
+    let output_width = width.output + width.qty + width.value + 6;
+
+    let header = format!(
+        "{reaction:^reaction_width$} | {input:^input_width$} | {output:^output_width$} | {profit:^profit_width$}",
+        reaction="Reaction", input="Input", output="Output", profit="Profit",
+        reaction_width=width.name, input_width=input_width, output_width=output_width, profit_width=width.profit+1
+    );
+
+    // This takes advantage that we can fill formats with a custom character,
+    // so we format an empty string into a field and fill it wish dashes. :)
+    let dashes = format!("{:-^len$}", "", len=header.len());
+
+    println!("{}\n{}",header,dashes);
+}
+
+fn max_width<'a>(strings: impl Iterator<Item=&'a String>) -> usize {
+    let mut max_width = 0;
+    for string in strings {
+        if string.len() > max_width {
+            max_width = string.len();
+        }
+    }
+    return max_width;
 }
 
 // Reads our resources from the YAML configuration file.
@@ -95,7 +129,7 @@ fn read_resources() -> HashMap<String, Resource> {
 
     for (name, value) in resources.iter() {
         let name  = String::from(name.as_str().unwrap());
-        println!("Resource: {}", name);
+        // println!("Resource: {}", name);
         let value = value.as_i64().unwrap() as u32;
         map.insert(name.clone(), Resource { name: name, value: value });
     }
