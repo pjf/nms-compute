@@ -9,6 +9,24 @@ use std::collections::HashMap;
 const RESOURCES_FILE: &'static str = "Resources.yaml";
 const RECIPES_FILE:   &'static str = "Recipes.yaml";
 
+struct FormattingWidth {
+    name: usize,
+    input: usize,
+    output: usize,
+    qty: usize,
+    value: usize,
+    profit: usize,
+}
+
+const FORMATTING_WIDTH: FormattingWidth = FormattingWidth {
+    name:   20,
+    input:  20,
+    output: 20,
+    qty:     3,
+    value:   7,
+    profit: 10,
+};
+
 struct Resource {
     name: String,
     value: u32,
@@ -38,25 +56,35 @@ fn main() {
     let recipes   = read_recipes(&resources);
 
     for recipe in recipes.iter() {
+
+        // Input_val tracks the cost of the entire recipe
         let mut input_val  = 0;
         let output_val = recipe.output.resource.value * recipe.output.qty;
 
         let mut input_qty  = 0;
 
-        println!("== {} ==", recipe.name);  // Pretty header
+        print!("{name:<width$} | ", name=recipe.name, width=FORMATTING_WIDTH.name);
 
         // Print all the inputs. Also sum their values and total amount used.
         for input in recipe.inputs.iter() {
+
+            // line_val is how much individual input costs.
             let line_val = input.resource.value * input.qty;
-            println!("Input:  {} × {} ({}u)", input.qty, input.resource.name, line_val);
+            print!(
+                "{qty:>qty_width$} × {input:<input_width$} ({value:>value_width$}u)",
+                qty=input.qty, input=input.resource.name, value=line_val,
+                qty_width=FORMATTING_WIDTH.qty, input_width=FORMATTING_WIDTH.input, value_width=FORMATTING_WIDTH.value
+            );
             input_val += line_val;
             input_qty += input.qty;
         }
 
-        println!("Output: {} × {} ({}u)\n", recipe.output.qty, recipe.output.resource.name, output_val);
-
         let profit = (output_val as f64 - input_val as f64) / input_qty as f64;
-        println!("Profit per input = {}u\n\n", profit);
+        println!(
+            " | {qty:>qty_width$} × {output:<output_width$} ({value:>value_width$}u) | {profit:>profit_width$}u",
+            qty=recipe.output.qty, output=recipe.output.resource.name, value=output_val, profit=profit,
+            qty_width=FORMATTING_WIDTH.qty, output_width=FORMATTING_WIDTH.output, value_width=FORMATTING_WIDTH.value, profit_width=FORMATTING_WIDTH.profit
+        );
     }
 }
 
