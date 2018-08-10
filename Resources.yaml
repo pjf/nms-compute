@@ -35,7 +35,7 @@ Gold: 202
 Platinum: 303
 Sulphurine: 20
 Radon: 20
-# Nitrogen:
+Nitrogen: 20
 # Activated Copper:
 # Activated Cadmium:
 # Activated Emeril:
@@ -47,7 +47,7 @@ Cactus Flesh: 28
 Solanium: 70
 Star Bulb: 32
 Marrow Bulb: 41
-# ???
+Kelp Sac: 41
 Coprite: 30
 # Residual Goop:
 # Runaway Mould:
@@ -65,7 +65,7 @@ Carbon Nanotubes: 500
 # Microprocessor:
 # Oxygen Capsule:
 # Life Support:
-# Ion Battery:
+Ion Battery: 200
 # Advanced Ion Battery:
 # Hydrogen Jelly:
 # Starship Launch Fuel:
@@ -81,15 +81,15 @@ Carbon Nanotubes: 500
 # Quad Servo:
 # Walker Brain:
 # Technology Module:
-# Carbon Crystal:
+Carbon Crystal: 3600
 # Rare Metal Element:
 TetraCobalt: 6150
 # ???
-# Destabilised Sodium:
+Destabilised Sodium: 12300
 # Superoxide Crystal:
 # Sac Venom:
 # Gravitino Ball:
-# Albumen Pearl:
+Albumen Pearl: 9025
 # Vortex Cube:
 # Aronium:
 # Dirty Bronze:
