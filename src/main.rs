@@ -158,7 +158,7 @@ fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
         let recipe = recipe.as_hash().unwrap();
         let name   = String::from(recipe.get(&Yaml::from_str("name")).unwrap().clone().into_string().unwrap());
 
-        println!("{}",name);
+        // println!("{}",name);
 
         // Build all our inputs
         let mut inputs = Vec::new();
