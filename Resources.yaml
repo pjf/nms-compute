@@ -13,40 +13,40 @@ Magnetised Ferrite: 82
 Sodium: 41
 Sodium Nitrate: 82
 Cobalt: 198
-# Ionised Cobalt:
-# Salt:
-# Chlorine:
+Ionised Cobalt: 401
+Salt: 299
+Chlorine: 602
 Copper: 121
-# Cadmium:
+Cadmium: 234
 Emeril: 348
 # Indium: 
 Chromatic Metal: 245
 # ???
 # Paraffinium:
-# Pyrite:
+Pyrite: 62
 # Ammonia:
-# Uranium:
-# Dioxite:
+Uranium: 62
+Dioxite: 62
 # Phosphorus:
 # Mordite:
 # Pugneum:
 Silver: 101
-# Gold:
-# Platinum:
-# Sulphurine:
-# Radon:
+Gold: 202
+Platinum: 303
+Sulphurine: 20
+Radon: 20
 # Nitrogen:
 # Activated Copper:
 # Activated Cadmium:
 # Activated Emeril:
 # Activated Indium:
-# Fungal Mould:
+Fungal Mould: 16
 Frost Crystal: 12
 Gamma Root: 16
 Cactus Flesh: 28
-# Solanium:
-# Star Bulb:
-# Marrow Bulb:
+Solanium: 70
+Star Bulb: 32
+Marrow Bulb: 41
 # ???
 Coprite: 30
 # Residual Goop:
@@ -60,7 +60,7 @@ Coprite: 30
 # In the same order as they are in the catalog
 
 # Metal Plating:
-# Carbon Nanotubes:
+Carbon Nanotubes: 500
 # Hermetic Seal:
 # Microprocessor:
 # Oxygen Capsule:
@@ -83,7 +83,7 @@ Coprite: 30
 # Technology Module:
 # Carbon Crystal:
 # Rare Metal Element:
-# TetraCobalt:
+TetraCobalt: 6150
 # ???
 # Destabilised Sodium:
 # Superoxide Crystal:
@@ -114,12 +114,12 @@ Frigate Fuel (200 Tonnes): 200000
 # Mineral Compressor:
 # Explosive Drones:
 # Fuel Oxidiser:
-# Gek Relic:
-# GekNip:
+Gek Relic: 23375
+GekNip: 20625
 # ???
-# Vy'keen Effigy:
+Vy'keen Effigy: 24750
 # Vy'keen Dagger:
-# Korvax Casing:
+Korvax Casing: 22000
 # Korvax Convergence Cube:
 # Acid:
 Lubricant: 160000
