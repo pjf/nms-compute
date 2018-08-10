@@ -128,10 +128,22 @@ fn read_resources() -> HashMap<String, Resource> {
     let resources = yaml_hash_from_file(RESOURCES_FILE);
 
     for (name, value) in resources.iter() {
+
+        // If there's no name then our YAML wouldn't have parsed.
         let name  = String::from(name.as_str().unwrap());
-        // println!("Resource: {}", name);
-        let value = value.as_i64().unwrap() as u32;
-        map.insert(name.clone(), Resource { name: name, value: value });
+
+        let value = match value.as_i64() {
+            None => panic!("Resource {} has no value", name),
+            Some(val) => val as u32
+        };
+
+        // Add our resource to our map.
+        map.insert(name.clone(),
+            Resource {
+                name: name,
+                value: value
+            }
+        );
     }
 
     return map;
@@ -146,12 +158,16 @@ fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
         let recipe = recipe.as_hash().unwrap();
         let name   = String::from(recipe.get(&Yaml::from_str("name")).unwrap().clone().into_string().unwrap());
 
+        println!("{}",name);
+
         // Build all our inputs
         let mut inputs = Vec::new();
         for input in recipe.get(&Yaml::from_str("inputs")).iter() {
 
             // XXX - This me getting a single key-value pair. Is there a better way?
             let (input, qty) = input.as_hash().unwrap().iter().last().unwrap();
+
+            // println!("- {}", input.as_str().unwrap());
 
             // Turn the key from our YAML file into an actual resource struct.
             let resource = resources.get(input.as_str().unwrap()).unwrap();
@@ -163,6 +179,7 @@ fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
         // There can only ever be one output, so we'll drill down to it directly.
         // XXX - OMFG, there's got to be a better way than this, please?
         let (output, qty) = recipe.get(&Yaml::from_str("output")).unwrap().as_hash().unwrap().iter().last().unwrap();
+        // println!("+ {}", output.as_str().unwrap());
         let output = resources.get(output.as_str().unwrap()).unwrap();
         let output = Output { resource: &output, qty: qty.as_i64().unwrap() as u32 };
 
