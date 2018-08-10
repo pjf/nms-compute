@@ -1,4 +1,6 @@
 ---
+# NMS Version 1.55
+
 - name: Purify Ferrite
   inputs:
       Ferrite Dust: 1
@@ -16,7 +18,7 @@
       Tritium: 50
       Di-hydrogen: 50
   output:
-      Frigate Fuel (50t): 1
+      Frigate Fuel (50 Tonnes): 1
 
 - name: Frobnicate Copper
   inputs:
@@ -49,3 +51,10 @@
       Lubricant: 1
   output:
       Living Glass: 1
+
+- name: Extreme Alloy Separation
+  inputs:
+      Herox: 1
+  output:
+      Silver: 250
+

@@ -1,26 +1,160 @@
-# Raw resources (including those which can be refined by a new player) and their values
+# Raw materials
+# In the same order as they are in the catalog (P)
 
+Carbon: 12
+Condensed Carbon: 24
+# Oxygen:
+Di-hydrogen: 34
+# Deuterium:
+Tritium: 6
 Ferrite Dust: 14
 Pure Ferrite: 28
 Magnetised Ferrite: 82
-Carbon: 12
-Condensed Carbon: 24
-Tritium: 6
-Di-hydrogen: 34
+# Sodium:
+# Sodium Nitrate:
+Cobalt: 198
+# Ionised Cobalt:
+# Salt:
+# Chlorine:
 Copper: 121
+# Cadmium:
 Emeril: 348
+# Indium: 
 Chromatic Metal: 245
-Gamma Root: 16
-Coprite: 30
-Cactus Flesh: 28
+# ???
+# Paraffinium:
+# Pyrite:
+# Ammonia:
+# Uranium:
+# Dioxite:
+# Phosphorus:
+# Mordite:
+# Pugneum:
+Silver: 101
+# Gold:
+# Platinum:
+# Sulphurine:
+# Radon:
+# Nitrogen:
+# Activated Copper:
+# Activated Cadmium:
+# Activated Emeril:
+# Activated Indium:
+# Fungal Mould:
 Frost Crystal: 12
+Gamma Root: 16
+Cactus Flesh: 28
+# Solanium:
+# Star Bulb:
+# Marrow Bulb:
+# ???
+Coprite: 30
+# Residual Goop:
+# Runaway Mould:
+# Rusted Metal:
+# ???
+# Viscous Fluids:
 
-# Crafted resources and values
 
-Glass: 18000
-Living Glass: 696000
-Poly Fiber: 200000
+# Crafted Products
+# In the same order as they are in the catalog
+
+# Metal Plating:
+# Carbon Nanotubes:
+# Hermetic Seal:
+# Microprocessor:
+# Oxygen Capsule:
+# Life Support:
+# Ion Battery:
+# Advanced Ion Battery:
+# Hydrogen Jelly:
+# Starship Launch Fuel:
+# Unstable Plasma:
+# Project Ammunition:
+# Antimatter Housing:
+# Antimatter:
+# Warp Cell:
+# Oxygen Filter:
+# Salt Refactor:
+# Cobalt Mirror:
+# Sodium Diode:
+# Quad Servo:
+# Walker Brain:
+# Technology Module:
+# Carbon Crystal:
+# Rare Metal Element:
+# TetraCobalt:
+# ???
+# Destabilised Sodium:
+# Superoxide Crystal:
+# Sac Venom:
+# Gravitino Ball:
+# Albumen Pearl:
+# Vortex Cube:
+# Aronium:
+# Dirty Bronze:
+Herox: 50000
+# Lemmium:
+# Magno-Gold:
+# ???
+# ???
+# ???
+# Navigation Data:
+# Drop Pod Coordinate Data:
+# AtlasPass v1:
+# AtlasPass v2:
+# AtlassPas v3:
+# Defence Chit:
+# Salvaged Technology:
+Frigate Fuel (50 Tonnes): 50000
+Frigate Fuel (100 Tonnes): 100000
+Frigate Fuel (200 Tonnes): 200000
+# Mind Control Device:
+# Holographic Analyser:
+# Mineral Compressor:
+# Explosive Drones:
+# Fuel Oxidiser:
+# Gek Relic:
+# GekNip:
+# ???
+# Vy'keen Effigy:
+# Vy'keen Dagger:
+# Korvax Casing:
+# Korvax Convergence Cube:
+# Acid:
 Lubricant: 160000
+Glass: 18000
 Heat Capacitor: 240000
+Poly Fiber: 200000
+# Unstable Gel:
+# Liquid Explosive:
+Living Glass: 696000
 Circuit Board: 1196250
-Frigate Fuel (50t): 50000
+# Thermic Condensate:
+# ???
+# Nitrogen Salt:
+# ???
+# Semiconductor
+# ???
+# Fusion Accelerant:
+# Superconductor:
+# Cryo-Pump:
+# ???
+# ???
+# ???
+# ???
+# ???
+# ???
+# Caputred Nanode:
+# Englobed Shade:
+# Noospheric Orb:
+# Dark Matter:
+# Dawn's End:
+# Photic Jade:
+# State Phasure:
+# ???
+# ???
+# ???
+# Larval Core:
+
+# All remaining 'crafted products' are buildings, which can't be sold.
