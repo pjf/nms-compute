@@ -1,5 +1,18 @@
 ---
 # NMS Version 1.55
+# Refinery recipes from https://docs.google.com/spreadsheets/d/1m3D-ElN7ek3Y0f-1XDt0IW2l6HxfXi5n5Yr7VLwLbg4/edit#gid=1263320803
+
+- name: Extreme Polishing
+  inputs:
+      Silver: 100
+  output:
+      Glass: 1
+
+- name: Metal Restructuring
+  inputs:
+      Gold: 1
+  output:
+      Pyrite: 1
 
 - name: Purify Ferrite
   inputs:
@@ -57,4 +70,3 @@
       Herox: 1
   output:
       Silver: 250
-
