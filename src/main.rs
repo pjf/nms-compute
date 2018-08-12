@@ -1,21 +1,24 @@
+#[macro_use] extern crate prettytable;
 extern crate yaml_rust;
 
 use std::fs::File;
 use std::io::Read;
+use std::collections::HashMap;
+
 use yaml_rust::{YamlLoader,Yaml};
 use yaml_rust::yaml::{Hash,Array};
-use std::collections::HashMap;
+
+use prettytable::Table;
+use prettytable::row::Row;
+use prettytable::cell::Cell;
+use prettytable::format;
 
 const RESOURCES_FILE: &'static str = "Resources.yaml";
 const RECIPES_FILE:   &'static str = "Recipes.yaml";
 
+// This struct used to have a lot more fields. :)
 struct FormattingWidth {
-    name: usize,
-    input: usize,
-    output: usize,
     qty: usize,
-    value: usize,
-    profit: usize,
 }
 
 struct Resource {
@@ -46,19 +49,15 @@ fn main() {
     let resources = read_resources();
     let recipes   = read_recipes(&resources);
 
+    // This struct used to have a lot more fields. :)
     let width = FormattingWidth {
-        // Some table elements have fixed widths
         qty:    3,
-        value:  7,
-        profit: 7,
-        // And some we'll dynamically generate some.
-        // I honestly thought these would be more succinct when I started.
-        name:   max_width(recipes.iter().map(|x| &x.name)),
-        output: max_width(recipes.iter().map(|x| &x.output.resource.name)),
-        input:  max_width(recipes.iter().flat_map(|x| &x.inputs).collect::<Vec<&InputOutput>>().iter().map(|x| &x.resource.name)),
     };
 
-    print_header(&width);
+    let mut table = Table::new();
+    table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
+
+    table.set_titles(row!["Reaction", "Input", "Input", "Input", "Output", "Profit"]);
 
     // Walk through all our recipes and print them!
     for recipe in recipes.iter() {
@@ -69,57 +68,56 @@ fn main() {
 
         let mut input_qty  = 0;
 
-        print!("{name:<width$} | ", name=recipe.name, width=width.name);
+        let mut row = Vec::<Cell>::new();
+
+        row.push(Cell::new(&recipe.name));
+
+        let mut inputs = 0;
 
         // Print all the inputs. Also sum their values and total amount used.
         for input in recipe.inputs.iter() {
 
             // line_val is how much individual input costs.
             let line_val = input.resource.value * input.qty;
-            print!(
-                "{qty:>qty_width$} × {input:<input_width$} ({value:>value_width$}u)",
-                qty=input.qty, input=input.resource.name, value=line_val,
-                qty_width=width.qty, input_width=width.input, value_width=width.value
+
+            row.push(
+                Cell::new(
+                    &format!("{qty:>qty_width$} × {input}",
+                        qty=input.qty, input=input.resource.name,
+                        qty_width=width.qty
+                    )
+                )
             );
+
             input_val += line_val;
             input_qty += input.qty;
+            inputs += 1;
+        }
+
+        // Fill input cells for recipes with fewer than three ingredients
+        while inputs < 3 {
+            row.push(Cell::new(""));
+            inputs += 1;
         }
 
         let profit = (output_val as f64 - input_val as f64) / input_qty as f64;
-        println!(
-            " |{qty:>qty_width$} × {output:<output_width$} ({value:>value_width$}u) | {profit:>profit_width$}u",
-            qty=recipe.output.qty, output=recipe.output.resource.name, value=output_val, profit=profit,
-            qty_width=width.qty, output_width=width.output, value_width=width.value, profit_width=width.profit
+
+        row.push(
+            Cell::new(
+                &format!("{qty:>qty_width$} × {output}",
+                    qty=recipe.output.qty, output=recipe.output.resource.name,
+                    qty_width=width.qty
+                )
+            )
         );
+
+        // Profit is styled to be right-aligned
+        row.push(Cell::new(&format!("{:.*}",2,profit)).style_spec("r"));
+
+        table.add_row(Row::new(row));
     }
-}
 
-fn print_header(width: &FormattingWidth) {
-
-    let input_width  = width.input  + width.qty + width.value + 7; // Magic 7 is our padding and '×' signs.
-    let output_width = width.output + width.qty + width.value + 6;
-
-    let header = format!(
-        "{reaction:^reaction_width$} | {input:^input_width$} | {output:^output_width$} | {profit:^profit_width$}",
-        reaction="Reaction", input="Input", output="Output", profit="Profit",
-        reaction_width=width.name, input_width=input_width, output_width=output_width, profit_width=width.profit+1
-    );
-
-    // This takes advantage that we can fill formats with a custom character,
-    // so we format an empty string into a field and fill it wish dashes. :)
-    let dashes = format!("{:-^len$}", "", len=header.len());
-
-    println!("{}\n{}",header,dashes);
-}
-
-fn max_width<'a>(strings: impl Iterator<Item=&'a String>) -> usize {
-    let mut max_width = 0;
-    for string in strings {
-        if string.len() > max_width {
-            max_width = string.len();
-        }
-    }
-    return max_width;
+    table.printstd();
 }
 
 // Reads our resources from the YAML configuration file.
