@@ -57,7 +57,7 @@ fn main() {
     let mut table = Table::new();
     table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
 
-    table.set_titles(row!["Reaction", "Input", "Input", "Input", "Output", "Profit"]);
+    table.set_titles(row!["Reaction", "Input", "Input", "Input", "Output", "Profit/input", "Profit Total"]);
 
     // Walk through all our recipes and print them!
     for recipe in recipes.iter() {
@@ -100,8 +100,7 @@ fn main() {
             inputs += 1;
         }
 
-        let profit = (output_val as f64 - input_val as f64) / input_qty as f64;
-
+        // Output product
         row.push(
             Cell::new(
                 &format!("{qty:>qty_width$} × {output}",
@@ -111,8 +110,13 @@ fn main() {
             )
         );
 
-        // Profit is styled to be right-aligned
-        row.push(Cell::new(&format!("{:.*}",2,profit)).style_spec("r"));
+        let profit: f64  = output_val as f64 - input_val as f64;
+        let profit_ea    = profit / input_qty as f64;
+
+        // Profits are styled to be right-aligned
+
+        row.push(Cell::new(&format!("{:.*}",2,profit_ea)).style_spec("r"));
+        row.push(Cell::new(&format!("{}",profit)).style_spec("r"));
 
         table.add_row(Row::new(row));
     }
