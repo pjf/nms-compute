@@ -150,9 +150,10 @@ fn read_resources() -> HashMap<String, Resource> {
 // Reads recipes from our recipes file and returns a vector of them.
 fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
     let recipes = yaml_array_from_file(RECIPES_FILE);
+
     let mut result = Vec::new();
 
-    for recipe in recipes.iter() {
+    for recipe in recipes {
         let recipe = recipe.as_hash().unwrap();
         let name   = String::from(recipe.get(&Yaml::from_str("name")).unwrap().clone().into_string().unwrap());
 
@@ -160,12 +161,7 @@ fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
 
         // Build all our inputs
         let mut inputs = Vec::new();
-        for input in recipe.get(&Yaml::from_str("inputs")).iter() {
-
-            // XXX - This me getting a single key-value pair. Is there a better way?
-            let (input, qty) = input.as_hash().unwrap().iter().last().unwrap();
-
-            // println!("- {}", input.as_str().unwrap());
+        for (input, qty) in recipe.get(&Yaml::from_str("inputs")).unwrap().as_hash().unwrap().iter() {
 
             // Turn the key from our YAML file into an actual resource struct.
             let resource = resources.get(input.as_str().unwrap()).unwrap();
