@@ -1,20 +1,145 @@
 ---
 # NMS Version 1.55
-# Refinery recipes from https://docs.google.com/spreadsheets/d/1m3D-ElN7ek3Y0f-1XDt0IW2l6HxfXi5n5Yr7VLwLbg4/edit#gid=1263320803
 
-- name: Rocket Fuel
+# Components
+
+- name: Crafted Hermetic Seal
+  inputs:
+      Condensed Carbon: 30
+  output:
+      Hermetic Seal: 1
+
+- name: Crafted Di-hydrogen Jelly
+  inputs:
+      Di-hydrogen: 40
+  output:
+      Di-hydrogen Jelly: 1
+
+- name: Crafted Metal Plating
+  inputs:
+      Ferrite Dust: 50
+  output:
+      Metal Plating: 1
+
+- name: Crafted Microprocessor
+  inputs:
+      Chromatic Metal: 40
+      Carbon Nanotubes: 1
+  output:
+      Microprocessor: 1
+
+- name: Crafted Carbon Nanotubes
+  inputs:
+      Carbon: 50
+  output:
+      Carbon Nanotubes: 1
+
+- name: Crafted Antimatter Housing
+  inputs:
+      Oxygen: 30
+      Ferrite Dust: 50
+  output:
+      Antimatter Housing: 1
+
+- name: Crafted Antimatter
+  inputs:
+      Chromatic Metal: 25
+      Condensed Carbon: 20
+  output:
+      Antimatter: 1
+
+# Consumables
+
+- name: Crafted Rocket Fuel
   inputs:
       Tritium: 50
       Di-hydrogen: 50
   output:
       Frigate Fuel (50 Tonnes): 1
 
-- name: Poly Fiber
+- name: Crafted Ion Battery
+  inputs:
+      Cobalt: 25
+      Ferrite Dust: 20
+  output:
+      Ion Battery: 1
+
+- name: Crafted Warp Cell
+  inputs:
+      Antimatter Housing: 1
+      Antimatter: 1
+  output:
+      Warp Cell: 1
+
+- name: Crafted Oxygen Capsule
+  inputs:
+      Oxygen: 25
+      Ferrite Dust: 20
+  output:
+      Oxygen Capsule: 1
+
+- name: Crafted Advanced Ion Battery
+  inputs:
+      Ionised Cobalt: 25
+      Pure Ferrite: 20
+  output:
+      Advanced Ion Battery: 1
+
+- name: Crafted Starship Launch Fuel
+  inputs:
+      Di-hydrogen: 40
+      Metal Plating: 1
+  output:
+      Starship Launch Fuel: 1
+
+- name: Crafted Projectile Ammunition
+  inputs:
+      Ferrite Dust: 60
+  output:
+      Projectile Ammunition: 500
+
+# Trade Items
+
+- name: Circuit Board
+  inputs:
+      Heat Capacitor: 1
+      Poly Fibre: 1
+  output:
+      Circuit Board: 1
+
+- name: Poly Fibre
   inputs:
       Star Bulb: 200
       Cactus Flesh: 100
   output:
-      Poly Fiber: 1
+      Poly Fibre: 1
+
+- name: Heat Capacitor
+  inputs:
+      Frost Crystal: 100
+      Solanium: 200
+  output:
+      Heat Capacitor: 1
+
+- name: Liquid Explosive
+  inputs:
+      Acid: 1
+      Unstable Gel: 1
+  output:
+      Liquid Explosive: 1
+
+- name: Unstable Gel
+  inputs:
+      Cactus Flesh: 200
+  output:
+      Unstable Gel: 1
+
+- name: Acid
+  inputs:
+      Mordite: 25
+      Fungal Mould: 600
+  output:
+      Acid: 1
 
 - name: Glass
   inputs:
@@ -35,3 +160,19 @@
       Lubricant: 1
   output:
       Living Glass: 1
+
+# Known, but missing ingredient data
+#
+# - name: Cryo-Pump
+#   inputs:
+#       Hot Ice: 1
+#       Thermic Condensate: 1
+#   output:
+#       Cryo-Pump: 1
+#
+# - name: Fusion Accelerant
+#   inputs:
+#       Organic Catalyst: 1
+#       Nitrogen Salt: 1
+#   output:
+#       Fusion Accelerant: 1

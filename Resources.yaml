@@ -19,17 +19,17 @@ Chlorine: 602
 Copper: 121
 Cadmium: 234
 Emeril: 348
-# Indium: 
+Indium: 464
 Chromatic Metal: 245
 # ???
-# Paraffinium:
+Paraffinium: 62
 Pyrite: 62
-# Ammonia:
+Ammonia: 62
 Uranium: 62
 Dioxite: 62
-# Phosphorus:
+Phosphorus: 62
 Mordite: 40
-# Pugneum:
+Pugneum: 138
 Silver: 101
 Gold: 202
 Platinum: 303
@@ -38,7 +38,7 @@ Radon: 20
 Nitrogen: 20
 # Activated Copper:
 # Activated Cadmium:
-# Activated Emeril:
+Activated Emeril: 696
 # Activated Indium:
 Fungal Mould: 16
 Frost Crystal: 12
@@ -49,9 +49,9 @@ Star Bulb: 32
 Marrow Bulb: 41
 Kelp Sac: 41
 Coprite: 30
-# Residual Goop:
+Residual Goop: 20
 # Runaway Mould:
-# Rusted Metal:
+Rusted Metal: 20
 # ???
 # Viscous Fluids:
 
@@ -59,21 +59,21 @@ Coprite: 30
 # Crafted Products
 # In the same order as they are in the catalog
 
-# Metal Plating:
+Metal Plating: 800
 Carbon Nanotubes: 500
-# Hermetic Seal:
-# Microprocessor:
-# Oxygen Capsule:
-# Life Support:
+Hermetic Seal: 800
+Microprocessor: 2000
+Oxygen Capsule: 350
+Life Support Gel: 200
 Ion Battery: 200
-# Advanced Ion Battery:
-# Hydrogen Jelly:
-# Starship Launch Fuel:
+Advanced Ion Battery: 500
+Di-hydrogen Jelly: 200
+Starship Launch Fuel: 450
 # Unstable Plasma:
-# Project Ammunition:
-# Antimatter Housing:
-# Antimatter:
-# Warp Cell:
+Projectile Ammunition: 5
+Antimatter Housing: 6500
+Antimatter: 5233
+Warp Cell: 46750
 # Oxygen Filter:
 # Salt Refactor:
 # Cobalt Mirror:
@@ -86,7 +86,7 @@ Rare Metal Element: 8400
 TetraCobalt: 6150
 Chloride Lattice: 6150
 Destabilised Sodium: 12300
-# Superoxide Crystal:
+Superoxide Crystal: 5100
 # Sac Venom:
 # Gravitino Ball:
 Albumen Pearl: 9025
@@ -94,7 +94,7 @@ Albumen Pearl: 9025
 # Aronium:
 # Dirty Bronze:
 Herox: 50000
-# Lemmium:
+Lemmium: 25000
 # Magno-Gold:
 # ???
 # ???
@@ -118,27 +118,27 @@ Gek Relic: 23375
 GekNip: 20625
 # ???
 Vy'keen Effigy: 24750
-# Vy'keen Dagger:
+Vy'keen Dagger: 11688
 Korvax Casing: 22000
 # Korvax Convergence Cube:
 Acid: 188000
 Lubricant: 110000
 Glass: 13000
 Heat Capacitor: 180000
-Poly Fiber: 130000
+Poly Fibre: 130000
 Unstable Gel: 50000
 Liquid Explosive: 800500
 Living Glass: 566000
 Circuit Board: 916250
-# Thermic Condensate:
-# ???
-# Nitrogen Salt:
+Thermic Condensate: 50000
+Enriched Carbon: 50000
+Nitrogen Salt: 50000
 # ???
 # Semiconductor
 # ???
 # Fusion Accelerant:
 # Superconductor:
-# Cryo-Pump:
+Cryo-Pump: 1500000
 # ???
 # ???
 # ???
@@ -156,5 +156,8 @@ Circuit Board: 916250
 # ???
 # ???
 # Larval Core:
+
+# How can we put a price on Nanite Clusters?
+Nanite Clusters: 0
 
 # All remaining 'crafted products' are buildings, which can't be sold.
