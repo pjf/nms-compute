@@ -2,48 +2,12 @@
 # NMS Version 1.55
 # Refinery recipes from https://docs.google.com/spreadsheets/d/1m3D-ElN7ek3Y0f-1XDt0IW2l6HxfXi5n5Yr7VLwLbg4/edit#gid=1263320803
 
-- name: Extreme Polishing
-  inputs:
-      Silver: 100
-  output:
-      Glass: 1
-
-- name: Metal Restructuring
-  inputs:
-      Gold: 1
-  output:
-      Pyrite: 1
-
-- name: Purify Ferrite
-  inputs:
-      Ferrite Dust: 1
-  output:
-      Pure Ferrite: 1
-
-- name: Condense Carbon
-  inputs:
-      Carbon: 2
-  output:
-      Condensed Carbon: 1
-
 - name: Rocket Fuel
   inputs:
       Tritium: 50
       Di-hydrogen: 50
   output:
       Frigate Fuel (50 Tonnes): 1
-
-- name: Frobnicate Copper
-  inputs:
-      Copper: 2
-  output:
-      Chromatic Metal: 1
-
-- name: Frobnicate Emeril
-  inputs:
-      Emeril: 2
-  output:
-      Chromatic Metal: 3
 
 - name: Poly Fiber
   inputs:
@@ -58,15 +22,16 @@
   output:
       Glass: 1
 
+- name: Lubricant
+  inputs:
+      Coprite: 50
+      Gamma Root: 400
+  output:
+      Lubricant: 1
+
 - name: Living Glass
   inputs:
       Glass: 5
       Lubricant: 1
   output:
       Living Glass: 1
-
-- name: Extreme Alloy Separation
-  inputs:
-      Herox: 1
-  output:
-      Silver: 250

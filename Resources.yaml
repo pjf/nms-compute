@@ -28,7 +28,7 @@ Pyrite: 62
 Uranium: 62
 Dioxite: 62
 # Phosphorus:
-# Mordite:
+Mordite: 40
 # Pugneum:
 Silver: 101
 Gold: 202
@@ -82,9 +82,9 @@ Ion Battery: 200
 # Walker Brain:
 # Technology Module:
 Carbon Crystal: 3600
-# Rare Metal Element:
+Rare Metal Element: 8400
 TetraCobalt: 6150
-# ???
+Chloride Lattice: 6150
 Destabilised Sodium: 12300
 # Superoxide Crystal:
 # Sac Venom:

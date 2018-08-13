@@ -1,9 +1,11 @@
 #[macro_use] extern crate prettytable;
 extern crate yaml_rust;
+extern crate csv;
 
 use std::fs::File;
 use std::io::Read;
 use std::collections::HashMap;
+use std::error::Error;
 
 use yaml_rust::{YamlLoader,Yaml};
 use yaml_rust::yaml::{Hash,Array};
@@ -13,8 +15,11 @@ use prettytable::row::Row;
 use prettytable::cell::Cell;
 use prettytable::format;
 
+use csv::StringRecord;
+
 const RESOURCES_FILE: &'static str = "Resources.yaml";
 const RECIPES_FILE:   &'static str = "Recipes.yaml";
+const REFINING_CSV:   &'static str = "Refinery.csv";
 
 // This struct used to have a lot more fields. :)
 struct FormattingWidth {
@@ -47,7 +52,8 @@ struct Recipe<'a> {
 fn main() {
 
     let resources = read_resources();
-    let recipes   = read_recipes(&resources);
+    let mut recipes   = read_recipes(&resources);
+    recipes.extend(read_refinery(&resources));
 
     // This struct used to have a lot more fields. :)
     let width = FormattingWidth {
@@ -123,6 +129,88 @@ fn main() {
 
     table.printstd();
 }
+
+// Reads our refinery recipes, which are from
+// https://docs.google.com/spreadsheets/d/1m3D-ElN7ek3Y0f-1XDt0IW2l6HxfXi5n5Yr7VLwLbg4/edit#gid=1526138107
+fn read_refinery(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
+    let fh = File::open(REFINING_CSV).expect(&format!("Could not open {}", REFINING_CSV));
+
+    let mut csv = csv::ReaderBuilder::new()
+        .has_headers(false)
+        .from_reader(fh)
+    ;
+
+    let mut rows = csv.records();
+
+    // First three lines of the refinery file are headers and notes, skip them.
+    for _ in 0..3 {
+        rows.next();
+    }
+
+    let mut recipes = Vec::new();
+
+    for record in rows {
+        let record = record.unwrap();
+
+        let name = record[6].to_string();
+
+        let recipe = read_refinery_record(&resources, &record);
+
+        match recipe {
+            Ok(r)  => recipes.push(r),
+            Err(e) => println!("Skipping {}: {}", name, e)
+        }
+
+    }
+
+    return recipes;
+}
+
+fn read_refinery_record<'a>(resources: &'a HashMap<String, Resource>, record: &StringRecord) -> Result<Recipe<'a>, Box<Error>> {
+
+    let output = Output {
+        resource: resources.get(&record[2]).ok_or("Output resource lookup failed")?,
+        qty:      record[3].parse()?
+    };
+
+    let mut inputs = Vec::new();
+
+    // First input should always be there
+    inputs.push(
+        Input {
+            resource: resources.get(&record[7]).ok_or("Input resource lookup failed")?,
+            qty:      record[8].parse()?
+        }
+    );
+
+    // 2nd input may be empty
+    if ! record[9].is_empty() {
+        inputs.push(
+            Input {
+                resource: resources.get(&record[9]).ok_or("Input resource lookup failed")?,
+                qty:      record[10].parse()?
+            }
+        )
+    }
+
+    // 3rd input may be empty
+    // XXX - This is copy/paste from above with different magic numbers. :(
+    if ! record[11].is_empty() {
+        inputs.push(
+            Input {
+                resource: resources.get(&record[11]).ok_or("Input resource lookup failed")?,
+                qty:      record[12].parse()?
+            }
+        )
+    }
+
+    return Ok(Recipe {
+        name: record[6].to_string(),
+        output: output,
+        inputs: inputs
+    });
+}
+
 
 // Reads our resources from the YAML configuration file.
 fn read_resources() -> HashMap<String, Resource> {

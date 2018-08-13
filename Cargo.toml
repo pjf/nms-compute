@@ -6,3 +6,4 @@ authors = ["Paul Fenwick <pjf@perltraining.com.au>"]
 [dependencies]
 yaml-rust = "0.4"
 prettytable-rs = "^0.7"
+csv = "1"
