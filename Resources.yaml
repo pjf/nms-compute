@@ -21,7 +21,7 @@ Cadmium: 234
 Emeril: 348
 Indium: 464
 Chromatic Metal: 245
-# ???
+Nanite Clusters: 27
 Paraffinium: 62
 Pyrite: 62
 Ammonia: 62
@@ -50,10 +50,10 @@ Marrow Bulb: 41
 Kelp Sac: 41
 Coprite: 30
 Residual Goop: 20
-# Runaway Mould:
+Runaway Mould: 20
 Rusted Metal: 20
-# ???
-# Viscous Fluids:
+Living Slime: 20
+Viscous Fluids: 20
 
 
 # Crafted Products
@@ -69,7 +69,7 @@ Ion Battery: 200
 Advanced Ion Battery: 500
 Di-hydrogen Jelly: 200
 Starship Launch Fuel: 450
-# Unstable Plasma:
+Unstable Plasma: 5750
 Projectile Ammunition: 5
 Antimatter Housing: 6500
 Antimatter: 5233
@@ -85,13 +85,13 @@ Carbon Crystal: 3600
 Rare Metal Element: 8400
 TetraCobalt: 6150
 Chloride Lattice: 6150
-Destabilised Sodium: 12300
+Destablised Sodium: 12300
 Superoxide Crystal: 5100
 # Sac Venom:
 Gravitino Ball: 12445
 Albumen Pearl: 9025
 # Vortex Cube:
-# Aronium:
+Aronium: 25000
 # Dirty Bronze:
 Herox: 50000
 Lemmium: 25000
@@ -156,8 +156,5 @@ Cryo-Pump: 1500000
 # ???
 # ???
 # Larval Core:
-
-# How can we put a price on Nanite Clusters?
-Nanite Clusters: 0
 
 # All remaining 'crafted products' are buildings, which can't be sold.
