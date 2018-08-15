@@ -154,6 +154,11 @@ fn read_refinery(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
 
         let name = record[6].to_string();
 
+        // Skip blank lines.
+        if name.is_empty() {
+            continue;
+        }
+
         let recipe = read_refinery_record(&resources, &record);
 
         match recipe {
