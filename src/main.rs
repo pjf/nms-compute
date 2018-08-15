@@ -173,39 +173,26 @@ fn read_refinery(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
 
 fn read_refinery_record<'a>(resources: &'a HashMap<String, Resource>, record: &StringRecord) -> Result<Recipe<'a>, Box<Error>> {
 
-    let output = Output {
-        resource: resources.get(&record[2]).ok_or("Output resource lookup failed")?,
-        qty:      record[3].parse()?
-    };
+    let output = read_refinery_ingredient(resources, &record[2], &record[3])?;
 
     let mut inputs = Vec::new();
 
     // First input should always be there
     inputs.push(
-        Input {
-            resource: resources.get(&record[7]).ok_or("Input resource lookup failed")?,
-            qty:      record[8].parse()?
-        }
+        read_refinery_ingredient(resources, &record[7], &record[8])?
     );
 
     // 2nd input may be empty
     if ! record[9].is_empty() {
         inputs.push(
-            Input {
-                resource: resources.get(&record[9]).ok_or("Input resource lookup failed")?,
-                qty:      record[10].parse()?
-            }
+            read_refinery_ingredient(resources, &record[9], &record[10])?
         )
     }
 
     // 3rd input may be empty
-    // XXX - This is copy/paste from above with different magic numbers. :(
     if ! record[11].is_empty() {
         inputs.push(
-            Input {
-                resource: resources.get(&record[11]).ok_or("Input resource lookup failed")?,
-                qty:      record[12].parse()?
-            }
+            read_refinery_ingredient(resources, &record[11], &record[12])?
         )
     }
 
@@ -216,6 +203,15 @@ fn read_refinery_record<'a>(resources: &'a HashMap<String, Resource>, record: &S
     });
 }
 
+fn read_refinery_ingredient<'a>(resources: &'a HashMap<String, Resource>, resource: &str, qty: &str) -> Result<InputOutput<'a>, Box<Error>> {
+    let resource = resources.get(resource).ok_or(format!("Resource '{}' lookup failed", resource))?;
+    let qty      = qty.parse()?;
+
+    return Ok(InputOutput {
+        resource,
+        qty
+    });
+}
 
 // Reads our resources from the YAML configuration file.
 fn read_resources() -> HashMap<String, Resource> {
