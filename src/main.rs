@@ -42,12 +42,6 @@ fn main() {
     // Walk through all our recipes and print them!
     for recipe in recipes.iter() {
 
-        // Input_val tracks the cost of the entire recipe
-        let mut input_val  = 0;
-        let output_val = recipe.output.resource.value * recipe.output.qty;
-
-        let mut input_qty  = 0;
-
         let mut row = Vec::<Cell>::new();
 
         row.push(Cell::new(&recipe.name));
@@ -56,9 +50,6 @@ fn main() {
 
         // Print all the inputs. Also sum their values and total amount used.
         for input in recipe.inputs.iter() {
-
-            // line_val is how much individual input costs.
-            let line_val = input.resource.value * input.qty;
 
             row.push(
                 Cell::new(
@@ -69,8 +60,6 @@ fn main() {
                 )
             );
 
-            input_val += line_val;
-            input_qty += input.qty;
             inputs += 1;
         }
 
@@ -90,13 +79,10 @@ fn main() {
             )
         );
 
-        let profit: f64  = output_val as f64 - input_val as f64;
-        let profit_ea    = profit / input_qty as f64;
-
         // Profits are styled to be right-aligned
 
-        row.push(Cell::new(&format!("{:.*}",2,profit_ea)).style_spec("r"));
-        row.push(Cell::new(&format!("{}",profit)).style_spec("r"));
+        row.push(Cell::new(&format!("{:.*}",2,recipe.profit_ea())).style_spec("r"));
+        row.push(Cell::new(&format!("{}",recipe.profit())).style_spec("r"));
 
         table.add_row(Row::new(row));
     }

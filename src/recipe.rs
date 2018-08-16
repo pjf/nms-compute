@@ -29,6 +29,38 @@ pub struct Recipe<'a> {
     pub output: Output<'a>,
 }
 
+// I'm not sure *why* `impl` needs a lifetime here, but it does. :/
+impl<'a> Recipe<'a> {
+    pub fn output_value(&self) -> u32 {
+        self.output.resource.value * self.output.qty
+    }
+
+    pub fn input_value(&self) -> u32 {
+        let mut total = 0;
+        for input in &self.inputs {
+            total += input.resource.value * input.qty;
+        }
+        return total;
+    }
+
+    pub fn input_qty(&self) -> u32 {
+        let mut total = 0;
+        for input in &self.inputs {
+            total += input.qty;
+        }
+        return total;
+    }
+
+    pub fn profit(&self) -> f64 {
+        self.output_value() as f64 - self.input_value() as f64
+    }
+
+    pub fn profit_ea(&self) -> f64 {
+        self.profit() / self.input_qty() as f64
+    }
+
+}
+
 // Reads recipes from our recipes file and returns a vector of them.
 pub fn read_recipes(resources: &ResourceMap) -> Vec<Recipe> {
     let recipes = yaml_array_from_file(RECIPES_FILE);
