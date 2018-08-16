@@ -2,9 +2,12 @@
 extern crate yaml_rust;
 extern crate csv;
 
+mod resource;
+
+use resource::{Resource,ResourceMap,Load};
+
 use std::fs::File;
 use std::io::Read;
-use std::collections::HashMap;
 use std::error::Error;
 
 use yaml_rust::{YamlLoader,Yaml};
@@ -17,18 +20,12 @@ use prettytable::format;
 
 use csv::StringRecord;
 
-const RESOURCES_FILE: &'static str = "Resources.yaml";
 const RECIPES_FILE:   &'static str = "Recipes.yaml";
 const REFINING_CSV:   &'static str = "Refinery.csv";
 
 // This struct used to have a lot more fields. :)
 struct FormattingWidth {
     qty: usize,
-}
-
-struct Resource {
-    name: String,
-    value: u32,
 }
 
 struct InputOutput<'a> {
@@ -51,7 +48,7 @@ struct Recipe<'a> {
 
 fn main() {
 
-    let resources = read_resources();
+    let resources = ResourceMap::load();
     let mut recipes   = read_recipes(&resources);
     recipes.extend(read_refinery(&resources));
 
@@ -132,7 +129,7 @@ fn main() {
 
 // Reads our refinery recipes, which are from
 // https://docs.google.com/spreadsheets/d/1m3D-ElN7ek3Y0f-1XDt0IW2l6HxfXi5n5Yr7VLwLbg4/edit#gid=1526138107
-fn read_refinery(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
+fn read_refinery(resources: &ResourceMap) -> Vec<Recipe> {
     let fh = File::open(REFINING_CSV).expect(&format!("Could not open {}", REFINING_CSV));
 
     let mut csv = csv::ReaderBuilder::new()
@@ -171,7 +168,7 @@ fn read_refinery(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
     return recipes;
 }
 
-fn read_refinery_record<'a>(resources: &'a HashMap<String, Resource>, record: &StringRecord) -> Result<Recipe<'a>, Box<Error>> {
+fn read_refinery_record<'a>(resources: &'a ResourceMap, record: &StringRecord) -> Result<Recipe<'a>, Box<Error>> {
 
     let output = read_refinery_ingredient(resources, &record[2], &record[3])?;
 
@@ -203,7 +200,7 @@ fn read_refinery_record<'a>(resources: &'a HashMap<String, Resource>, record: &S
     });
 }
 
-fn read_refinery_ingredient<'a>(resources: &'a HashMap<String, Resource>, resource: &str, qty: &str) -> Result<InputOutput<'a>, Box<Error>> {
+fn read_refinery_ingredient<'a>(resources: &'a ResourceMap, resource: &str, qty: &str) -> Result<InputOutput<'a>, Box<Error>> {
     let resource = resources.get(resource).ok_or(format!("Resource '{}' lookup failed", resource))?;
     let qty      = qty.parse()?;
 
@@ -213,35 +210,8 @@ fn read_refinery_ingredient<'a>(resources: &'a HashMap<String, Resource>, resour
     });
 }
 
-// Reads our resources from the YAML configuration file.
-fn read_resources() -> HashMap<String, Resource> {
-    let mut map = HashMap::new();
-    let resources = yaml_hash_from_file(RESOURCES_FILE);
-
-    for (name, value) in resources.iter() {
-
-        // If there's no name then our YAML wouldn't have parsed.
-        let name  = String::from(name.as_str().unwrap());
-
-        let value = match value.as_i64() {
-            None => panic!("Resource {} has no value", name),
-            Some(val) => val as u32
-        };
-
-        // Add our resource to our map.
-        map.insert(name.clone(),
-            Resource {
-                name: name,
-                value: value
-            }
-        );
-    }
-
-    return map;
-}
-
 // Reads recipes from our recipes file and returns a vector of them.
-fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
+fn read_recipes(resources: &ResourceMap) -> Vec<Recipe> {
     let recipes = yaml_array_from_file(RECIPES_FILE);
 
     let mut result = Vec::new();
@@ -249,8 +219,6 @@ fn read_recipes(resources: &HashMap<String, Resource>) -> Vec<Recipe> {
     for recipe in recipes {
         let recipe = recipe.as_hash().unwrap();
         let name   = String::from(recipe.get(&Yaml::from_str("name")).unwrap().clone().into_string().unwrap());
-
-        // println!("{}",name);
 
         // Build all our inputs
         let mut inputs = Vec::new();
