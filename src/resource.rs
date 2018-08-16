@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::ops::Deref;
 use yaml_hash_from_file;
 
 const RESOURCES_FILE: &'static str = "Resources.yaml";
@@ -8,18 +9,30 @@ pub struct Resource {
     pub value: u32,
 }
 
-pub type ResourceMap = HashMap<String, Resource>;
+// Type alias because we'll be using this to build our ResourceMap internally.
+type _ResourceMap = HashMap<String, Resource>;
 
-// Rust doesn't let me add an impl to HashMap<x,y> because it's not defined in my crate
-// (it's from std::), but I *can* add a trait and implementation.
-// XXX - Is this the best way to do this?
-pub trait Load<T> {
-    fn load() -> T;
+// ResourceMap is a tuple of one element, which is our hashmap.
+pub struct ResourceMap (_ResourceMap);
+
+// For now ResourceMap just has a single load() function, that reads in
+// all our resources.
+impl ResourceMap {
+    pub fn load() -> ResourceMap {
+        return read_resources();
+    }
 }
 
-impl Load<ResourceMap> for ResourceMap {
-    fn load() -> ResourceMap {
-        return read_resources();
+// Here's the inheritance-like magic. Deref allows us to use our ResourceMap
+// like a HashMap.
+impl Deref for ResourceMap {
+
+    // This to the Deref implementation what we can be used as.
+    type Target = _ResourceMap;
+
+    // And here's how we get our underlying struct.
+    fn deref(&self) -> &_ResourceMap {
+        &self.0
     }
 }
 
@@ -47,5 +60,5 @@ fn read_resources() -> ResourceMap {
         );
     }
 
-    return map;
+    return ResourceMap(map);
 }

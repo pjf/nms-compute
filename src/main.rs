@@ -4,7 +4,7 @@ extern crate csv;
 
 mod resource;
 
-use resource::{Resource,ResourceMap,Load};
+use resource::{Resource,ResourceMap};
 
 use std::fs::File;
 use std::io::Read;
